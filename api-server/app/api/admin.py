@@ -187,42 +187,6 @@ def download_pdf():
         return jsonify({"error": "Failed to download document", "message": str(e)}), 500
 
 
-
-@admin_bp.route("/run-rag-pipeline", methods=["POST"])
-def run_rag_pipeline():
-    """
-    Trigger the RAG pipeline to process PDF and create vector database
-    
-    This endpoint will:
-    1. Extract text from the PDF
-    2. Chunk the text
-    3. Gepages_processed": number,
-        "message": "description"
-    }
-    """
-    try:
-        logger.info("RAG pipeline execution requested")
-        
-        # Get RAG pipeline and process PDF
-        pipeline = get_rag_pipeline()
-        result = pipeline.process_pdf()
-        
-        if result["status"] == "completed":
-            logger.info(f"RAG pipeline completed: {result['chunks_created']} chunks created")
-            return jsonify(result), 200
-        else:
-            logger.error(f"RAG pipeline failed: {result.get('error', 'Unknown error')}")
-            return jsonify(result), 400
-        
-    except Exception as e:
-        logger.error(f"Unexpected error in run_rag_pipeline: {e}", exc_info=True)
-        return jsonify({
-            "status": "failed",
-            "error": "RAG pipeline failed",
-            "message": str(e)
-        }), 500
-
-
 @admin_bp.route("/pipeline-status", methods=["GET"])
 def get_pipeline_status():
     """

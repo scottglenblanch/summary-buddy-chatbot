@@ -1,0 +1,16 @@
+{
+  "name": "vector-database",
+  "sourceRoot": "vector-database",
+  "projectType": "application",
+  "targets": {
+    "up": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "vector-database",
+        "command": "docker compose --env-file ../.env -f compose.dev.yml up -d --build postgres"
+      }
+    }
+  },
+  "tags": []
+}

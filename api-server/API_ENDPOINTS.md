@@ -25,7 +25,7 @@ Check if the backend service is running.
 
 ## Chatbot Endpoints
 
-### POST /ask-game-master-chatbot
+### POST /ask-ai-summary-buddy
 
 Ask the Game Master a question about your uploaded documents. Uses RAG (Retrieval-Augmented Generation) to provide context-aware answers.
 
@@ -75,7 +75,7 @@ Ask the Game Master a question about your uploaded documents. Uses RAG (Retrieva
 
 **Notes:**
 - Question must be a non-empty string
-- Requires RAG pipeline to be initialized (run /admin/run-rag-pipeline first)
+- Requires documents to be uploaded and processed first (POST /admin/upload-documents)
 - Returns top 4 most relevant sources from the knowledge base
 - Conversations are automatically saved to the database
 
@@ -84,57 +84,6 @@ Ask the Game Master a question about your uploaded documents. Uses RAG (Retrieva
 ## Admin Endpoints
 
 All admin endpoints are prefixed with `/admin`.
-
-### POST /admin/run-rag-pipeline
-
-Trigger the RAG pipeline to process an uploaded PDF and create the vector database. This should be run before answering questions.
-
-**Request:**
-```json
-{}
-```
-
-**Response (200 OK - Success):**
-```json
-{
-  "status": "completed",
-  "chunks_created": 250,
-  "pages_processed": 100,
-  "message": "Successfully processed PDF and created 250 chunks"
-}
-```
-
-**Response (400 Bad Request - Failed):**
-```json
-{
-  "status": "failed",
-  "error": "No PDF found in resources/",
-  "message": "Please place a PDF in the resources directory."
-}
-```
-
-**Response (500 Internal Server Error):**
-```json
-{
-  "status": "failed",
-  "error": "RAG pipeline failed",
-  "message": "Error details here"
-}
-```
-
-**Processing Steps:**
-1. Extracts text from PDF using pypdf
-2. Chunks text into 1000-token segments with 200-token overlap
-3. Generates embeddings using OpenAI's text-embedding-3-large
-4. Creates/updates the pgvector store in PostgreSQL
-5. Saves execution log to database
-
-**Performance:**
-- Processing time depends on PDF size (typically 30-60 seconds for 100-page PDF)
-- Creates embeddings API calls (costs ~$0.02 per 1M tokens)
-- Stores embeddings in PostgreSQL via the pgvector extension
-
----
 
 ### GET /admin/pipeline-status
 
@@ -283,7 +232,6 @@ Download a stored PDF document.
 | Scenario | Status | Response |
 |----------|--------|----------|
 | Missing question field | 400 | `{"error": "Invalid request", "details": [...]}` |
-| PDF not found | 404 | `{"error": "PDF not found in resources directory"}` |
 | RAG pipeline not initialized | 400 | `{"answer": "I couldn't find relevant information...", "error": "No relevant documents found"}` |
 | OpenAI API error | 500 | `{"error": "Internal server error", "message": "..."}` |
 | Database error | 500 | `{"error": "Internal server error", "message": "..."}` |
@@ -295,26 +243,18 @@ Download a stored PDF document.
 ### Example 1: Basic Question
 
 ```bash
-curl -X POST http://localhost:5000/api/ask-game-master-chatbot \
+curl -X POST http://localhost:5000/api/ask-ai-summary-buddy \
   -H "Content-Type: application/json" \
   -d '{"question": "Who is Kaladin?"}'
 ```
 
-### Example 2: Initialize Pipeline
-
-```bash
-curl -X POST http://localhost:5000/api/admin/run-rag-pipeline \
-  -H "Content-Type: application/json" \
-  -d '{}'
-```
-
-### Example 3: Check Pipeline Status
+### Example 2: Check Pipeline Status
 
 ```bash
 curl http://localhost:5000/api/admin/pipeline-status
 ```
 
-### Example 4: Python Client
+### Example 3: Python Client
 
 ```python
 import requests
@@ -323,13 +263,9 @@ BASE_URL = "http://localhost:5000/api"
 
 # Ask a question
 response = requests.post(
-    f"{BASE_URL}/ask-game-master-chatbot",
+    f"{BASE_URL}/ask-ai-summary-buddy",
     json={"question": "Tell me about the Knights Radiant"}
 )
-print(response.json())
-
-# Initialize pipeline
-response = requests.post(f"{BASE_URL}/admin/run-rag-pipeline")
 print(response.json())
 
 # Get status
@@ -337,25 +273,16 @@ response = requests.get(f"{BASE_URL}/admin/pipeline-status")
 print(response.json())
 ```
 
-### Example 5: TypeScript/JavaScript Client
+### Example 4: TypeScript/JavaScript Client
 
 ```typescript
 const BASE_URL = "http://localhost:5000/api";
 
 async function askQuestion(question: string) {
-  const response = await fetch(`${BASE_URL}/ask-game-master-chatbot`, {
+  const response = await fetch(`${BASE_URL}/ask-ai-summary-buddy`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ question })
-  });
-  return response.json();
-}
-
-async function runPipeline() {
-  const response = await fetch(`${BASE_URL}/admin/run-rag-pipeline`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({})
   });
   return response.json();
 }
@@ -429,8 +356,7 @@ Log levels:
 | Endpoint | Typical Time | Notes |
 |----------|--------------|-------|
 | GET /health | 10ms | Fast health check |
-| POST /ask-game-master-chatbot | 1-3s | Depends on network and LLM API |
-| POST /admin/run-rag-pipeline | 30-60s | Depends on PDF size |
+| POST /ask-ai-summary-buddy | 1-3s | Depends on network and LLM API |
 | GET /admin/pipeline-status | 50ms | Fast database query |
 | GET /admin/download-pdf | 100-500ms | Depends on file size |
 
@@ -474,25 +400,11 @@ docker-compose -f docker-compose.dev.yml logs backend
 docker-compose -f docker-compose.dev.yml restart backend
 ```
 
-### PDF Not Found
-
-```bash
-# Verify PDF exists
-ls -la resources/
-
-# Check storage service
-docker-compose -f docker-compose.dev.yml exec backend \
-  python -c "from app.services.storage import StorageService; s = StorageService(); print(s.get_pdf_path())"
-```
-
 ### Vector Database Errors
 
 ```bash
 # Check database status
 curl http://localhost:5000/api/admin/pipeline-status
-
-# Clear and reinitialize
-curl -X POST http://localhost:5000/api/admin/run-rag-pipeline
 
 # Inspect vector tables in PostgreSQL
 docker-compose -f docker-compose.dev.yml exec postgres \

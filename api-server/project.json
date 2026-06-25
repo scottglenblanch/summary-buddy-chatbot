@@ -18,12 +18,12 @@
         "command": "uv python install 3.12 && uv sync"
       }
     },
-    "serve": {
+    "up": {
       "executor": "nx:run-commands",
       "cache": false,
       "options": {
         "cwd": "api-server",
-        "command": "uv run python -m app.main"
+        "command": "docker compose --env-file ../.env -f compose.dev.yml up -d --build backend"
       },
       "configurations": {
         "development": {

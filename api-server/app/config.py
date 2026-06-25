@@ -62,9 +62,6 @@ class Config:
     AWS_S3_BUCKET = os.environ.get("AWS_S3_BUCKET", "")
     AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL", "")
 
-    # Storage backend: "s3" (S3 in AWS, MinIO container locally) or "local"
-    STORAGE_BACKEND = os.environ.get("STORAGE_BACKEND", "")
-    
     # Vector DB (PostgreSQL + pgvector)
     PGVECTOR_URL = os.environ.get(
         "PGVECTOR_URL",
@@ -74,11 +71,6 @@ class Config:
         )
     )
     PGVECTOR_COLLECTION_NAME = os.environ.get("PGVECTOR_COLLECTION_NAME", "summary_buddy")
-    
-    # PDF Storage
-    PDF_DIR = os.environ.get("PDF_DIR", "/app/resources")
-    UPLOADS_DIR = os.environ.get("UPLOADS_DIR", "/app/resources/uploads")
-    EXTRACTED_TEXTS_DIR = os.environ.get("EXTRACTED_TEXTS_DIR", "/app/resources/summary_buddy_texts")
     
     # RAG Settings
     CHUNK_SIZE = int(os.environ.get("CHUNK_SIZE", "1000"))

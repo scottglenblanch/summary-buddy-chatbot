@@ -29,19 +29,19 @@ Save to Database & Return to User
 ## Services Overview
 
 ### 1. StorageService (`storage.py`)
-Manages file storage with support for both local and AWS S3.
+Manages file storage using S3-compatible object storage (Amazon S3 in AWS, a MinIO container locally).
 
 **Features:**
-- Dual-mode storage (local/S3)
-- Automatic fallback to local if S3 unavailable
-- Manages PDF directory, extracted texts, and vector database
+- S3-compatible object storage (S3 / MinIO)
+- Auto-creates the bucket if it does not exist
+- Stores original uploads and extracted texts under key prefixes
 
 **Key Methods:**
 ```python
-storage.get_pdf_path()              # Get PDF location
+storage.save_upload(name, data)     # Store an original upload (PDF/TXT)
+storage.list_uploads()              # List original uploads
 storage.save_text_file()            # Save extracted text
 storage.list_text_files()           # List extracted texts
-storage.get_vector_db_path()        # Get vector DB location
 storage.clear_text_files()          # Clear all texts
 ```
 
@@ -49,8 +49,8 @@ storage.clear_text_files()          # Clear all texts
 ```python
 from app.services.storage import StorageService
 
-storage = StorageService(use_s3=False)  # Local storage
-pdf_path = storage.get_pdf_path()
+storage = StorageService()  # S3-compatible storage (MinIO locally)
+uploads = storage.list_uploads()
 ```
 
 ### 2. PDFProcessor (`pdf_processor.py`)
@@ -65,7 +65,6 @@ Extracts text from PDF files using pypdf.
 **Key Methods:**
 ```python
 processor.extract_text_from_pdf(path)   # Extract all pages
-processor.find_pdf()                    # Find PDF in resources
 ```
 
 **Output:**
@@ -165,17 +164,17 @@ Main orchestrator that coordinates all services.
 
 **Key Methods:**
 ```python
-pipeline.process_pdf()              # Process PDF and create embeddings
+pipeline.process_upload(path, name) # Process an uploaded document and add embeddings
 pipeline.ask_question(question)     # Answer a question with RAG
 pipeline.get_status()               # Get pipeline status
 ```
 
-**Process PDF Workflow:**
-1. Extract text from PDF (pypdf)
-2. Split into chunks (1000 tokens, 200 overlap)
-3. Clear existing vector database
+**Upload Processing Workflow:**
+1. Extract text (PDF via pypdf, or read the .txt file)
+2. Save extracted text files to storage
+3. Split into chunks (1000 tokens, 200 overlap)
 4. Generate embeddings (OpenAI)
-5. Add to pgvector store in PostgreSQL
+5. Append to pgvector store in PostgreSQL
 6. Log execution in database
 
 **Ask Question Workflow:**
@@ -192,8 +191,8 @@ from app.services.rag_pipeline import get_rag_pipeline
 
 pipeline = get_rag_pipeline()
 
-# Process PDF
-result = pipeline.process_pdf()
+# Process an uploaded document (PDF or TXT)
+result = pipeline.process_upload(file_path, "document.pdf")
 # Returns: {"status": "completed", "chunks_created": 250, ...}
 
 # Ask question
@@ -218,9 +217,9 @@ CHUNK_SIZE=1000              # Tokens per chunk
 CHUNK_OVERLAP=200            # Token overlap between chunks
 RAG_K_RESULTS=4              # Number of results to retrieve
 
-# Storage
-PDF_DIR=resources
-EXTRACTED_TEXTS_DIR=resources/summary_buddy_texts
+# Storage (S3-compatible; MinIO locally)
+AWS_S3_BUCKET=summary-buddy-uploads
+AWS_S3_ENDPOINT_URL=http://minio:9000
 
 # Vector DB (PostgreSQL + pgvector; defaults to DATABASE_URL)
 PGVECTOR_URL=postgresql://postgres:postgres@postgres:5432/summary_buddy_chatbot

@@ -24,7 +24,7 @@
     "nx": "23.0.1"
   },
   "scripts": {
-    "dev": "docker-compose -f docker-compose.dev.yml up --build"
+    "dev:up:all": "nx run-many -t up"
   },
   "keywords": [
     "summary-buddy",

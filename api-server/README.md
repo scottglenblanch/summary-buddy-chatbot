@@ -11,7 +11,7 @@ api-server/
 │   ├── config.py                # Configuration management
 │   ├── main.py                  # Entry point for local development
 │   ├── api/
-│   │   ├── chatbot.py          # POST /ask-game-master-chatbot
+│   │   ├── chatbot.py          # POST /ask-ai-summary-buddy
 │   │   ├── admin.py            # Admin endpoints
 │   │   └── health.py           # GET /health
 │   ├── services/
@@ -80,7 +80,7 @@ docker-compose up backend
 ## API Endpoints
 
 ### Chat
-- **POST** `/api/ask-game-master-chatbot`
+- **POST** `/api/ask-ai-summary-buddy`
   - Ask the Game Master a question
   - Request: `{ "question": "Your question" }`
   - Response: `{ "answer": "...", "sources": [...], "conversation_id": "..." }`
@@ -89,8 +89,8 @@ docker-compose up backend
 - **GET** `/api/admin/download-pdf`
   - Download an uploaded PDF
 
-- **POST** `/api/admin/run-rag-pipeline`
-  - Trigger RAG pipeline to process PDF and create vector database
+- **POST** `/api/admin/upload-documents`
+  - Upload documents, extract text, and update the vector database
 
 ### Health
 - **GET** `/api/health`

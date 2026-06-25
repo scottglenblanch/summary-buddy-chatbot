@@ -385,9 +385,9 @@ pnpm lint
 The frontend communicates with the backend via REST API:
 
 ### Endpoints Used
-- **POST** `/api/ask-game-master-chatbot` - Ask a question
+- **POST** `/api/ask-ai-summary-buddy` - Ask a question
 - **GET** `/api/admin/download-pdf` - Download PDF
-- **POST** `/api/admin/run-rag-pipeline` - Run RAG pipeline
+- **POST** `/api/admin/upload-documents` - Upload and process documents
 - **GET** `/api/health` - Health check
 
 API client is in `src/services/api.ts`

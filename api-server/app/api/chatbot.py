@@ -24,7 +24,7 @@ class AskQuestionRequest(BaseModel):
         }
 
 
-@chatbot_bp.route("/ask-game-master-chatbot", methods=["POST"])
+@chatbot_bp.route("/ask-ai-summary-buddy", methods=["POST"])
 def ask_game_master():
     """
     Ask the Game Master a question powered by RAG

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios'
-import { ChatResponse, RAGPipelineResponse, MultiUploadResponse, UploadsListResponse } from '@types/index'
+import { ChatResponse, MultiUploadResponse, UploadsListResponse } from '@types/index'
 
 // Re-export shared types so components can import them from the api module
 export type { ChatResponse, RAGPipelineResponse, MultiUploadResponse, UploadsListResponse } from '@types/index'
@@ -20,7 +20,7 @@ const api: AxiosInstance = axios.create({
  */
 export async function askGameMaster(question: string): Promise<ChatResponse> {
   try {
-    const response = await api.post<ChatResponse>('/ask-game-master-chatbot', {
+    const response = await api.post<ChatResponse>('/ask-ai-summary-buddy', {
       question,
     })
     return response.data
@@ -57,25 +57,6 @@ export async function uploadDocuments(files: File[]): Promise<MultiUploadRespons
     throw new Error(
       backendMessage ||
         (error instanceof Error ? error.message : 'Failed to upload documents')
-    )
-  }
-}
-
-/**
- * Run the RAG pipeline to process PDF and create vector database
- * @returns Promise containing RAG pipeline status
- */
-export async function runRAGPipeline(): Promise<RAGPipelineResponse> {
-  try {
-    const response = await api.post<RAGPipelineResponse>(
-      '/admin/run-rag-pipeline'
-    )
-    return response.data
-  } catch (error) {
-    throw new Error(
-      error instanceof Error
-        ? error.message
-        : 'Failed to run RAG pipeline'
     )
   }
 }

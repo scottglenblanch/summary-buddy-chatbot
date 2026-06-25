@@ -21,8 +21,8 @@ graph TB
     subgraph "Backend - Flask/Python"
         direction TB
         App["Flask App"]
-        ChatAPI["POST /api/ask-game-master-chatbot<br/>Handle user questions"]
-        AdminAPI["GET /api/admin/download-pdf<br/>POST /api/admin/run-rag-pipeline"]
+        ChatAPI["POST /api/ask-ai-summary-buddy<br/>Handle user questions"]
+        AdminAPI["GET /api/admin/download-pdf<br/>POST /api/admin/upload-documents"]
         HealthAPI["GET /api/health"]
     end
 
@@ -236,9 +236,9 @@ nx run backend:test                  # Custom Python tests
 - **Admin Panel** (`/admin`): Administrative controls
 
 ### API Layer (Flask Backend)
-- **POST /api/ask-game-master-chatbot**: Submit questions and receive RAG-enhanced answers
+- **POST /api/ask-ai-summary-buddy**: Submit questions and receive RAG-enhanced answers
 - **GET /api/admin/download-pdf**: Download an uploaded document
-- **POST /api/admin/run-rag-pipeline**: Trigger PDF processing and vector DB creation
+- **POST /api/admin/upload-documents**: Upload documents, process them, and update the vector DB
 - **GET /api/health**: Health check endpoint
 
 ### Backend Services
@@ -294,7 +294,7 @@ Coordinates the entire retrieval-augmented generation workflow:
 
 ### Chat Request Flow
 1. User enters question in Game Master Chat
-2. Frontend sends POST to `/api/ask-game-master-chatbot`
+2. Frontend sends POST to `/api/ask-ai-summary-buddy`
 3. Backend RAG pipeline retrieves similar documents from pgvector
 4. LLM generates answer with retrieved context
 5. Backend stores conversation in PostgreSQL

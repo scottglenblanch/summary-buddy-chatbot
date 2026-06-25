@@ -1,0 +1,16 @@
+{
+  "name": "file-storage",
+  "sourceRoot": "file-storage",
+  "projectType": "application",
+  "targets": {
+    "up": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "file-storage",
+        "command": "docker compose --env-file ../.env -f compose.dev.yml up -d --build minio"
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,5 +1,5 @@
 # Frontend service - development (Vite dev server)
-# Included by devops/docker/docker-compose.dev.yml
+# Run from this folder: docker compose -f compose.dev.yml up -d --build frontend
 services:
   frontend:
     build:
@@ -8,8 +8,6 @@ services:
     container_name: summary-buddy-frontend-dev
     ports:
       - "3000:3000"
-    depends_on:
-      - backend
     environment:
       VITE_API_BASE_URL: http://localhost:5000/api
     volumes:
@@ -22,4 +20,4 @@ services:
 
 networks:
   summary-buddy-network:
-    driver: bridge
+    external: true
