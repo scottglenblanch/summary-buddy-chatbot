@@ -1,0 +1,24 @@
+{
+  "name": "webui",
+  "sourceRoot": "webui/src",
+  "projectType": "application",
+  "targets": {
+    "install": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "webui",
+        "command": "pnpm install"
+      }
+    },
+    "up": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "webui",
+        "command": "docker compose --env-file ../.env -f compose.dev.yml up -d --build frontend"
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,44 @@
+{
+  "name": "api-server",
+  "sourceRoot": "api-server/app",
+  "projectType": "application",
+  "targets": {
+    "clean": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "find . -type d -name __pycache__ -prune -exec rm -rf {} +"
+      }
+    },    
+    "install": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "api-server",
+        "command": "uv python install 3.12 && uv sync"
+      }
+    },
+    "up": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "api-server",
+        "command": "docker compose --env-file ../.env -f compose.dev.yml up -d --build backend"
+      },
+      "configurations": {
+        "development": {
+          "env": {
+            "FLASK_ENV": "development"
+          }
+        },
+        "production": {
+          "env": {
+            "FLASK_ENV": "production"
+          }
+        }
+      },
+      "defaultConfiguration": "development"
+    }
+  },
+  "tags": []
+}

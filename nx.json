@@ -1,0 +1,8 @@
+{
+  "$schema": "./.nx/installation/node_modules/nx/schemas/nx-schema.json",
+  "installation": {
+    "version": "23.0.1"
+  },
+  "defaultBase": "master",
+  "analytics": false
+}
