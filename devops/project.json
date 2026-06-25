@@ -1,0 +1,67 @@
+{
+  "name": "devops",
+  "sourceRoot": "devops",
+  "projectType": "application",
+  "targets": {
+    "ps": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "docker compose -f devops/docker/docker-compose.yml ps"
+      }
+    },
+    "up": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "docker compose -f devops/docker/docker-compose.yml up -d --build"
+      }
+    },
+    "down": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "docker compose -f devops/docker/docker-compose.yml down"
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "docker compose -f devops/docker/docker-compose.dev.yml up --build"
+      }
+    },
+    "logs": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "docker compose -f devops/docker/docker-compose.yml logs -f"
+      }
+    },
+    "terraform-init": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "terraform",
+        "command": "terraform init"
+      }
+    },
+    "terraform-plan": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "terraform",
+        "command": "terraform plan"
+      }
+    },
+    "terraform-apply": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "terraform",
+        "command": "terraform apply"
+      }
+    }
+  },
+  "tags": []
+}

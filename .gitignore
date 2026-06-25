@@ -1,0 +1,8 @@
+.env
+.nx
+node_modules
+resources
+
+# Python bytecode/cache
+**/__pycache__/
+*.py[cod]

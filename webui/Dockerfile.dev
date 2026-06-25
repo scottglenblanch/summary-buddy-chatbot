@@ -1,0 +1,23 @@
+# Development build stage
+FROM node:20-alpine AS dev-builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json ./
+COPY tsconfig.json tsconfig.node.json ./
+
+# Install dependencies with pnpm
+RUN corepack enable && pnpm install --no-frozen-lockfile
+
+# Copy source code
+COPY src ./src
+COPY public ./public
+COPY index.html ./
+COPY vite.config.ts ./
+
+# Expose port for dev server
+EXPOSE 3000
+
+# Start Vite dev server
+CMD ["pnpm", "run", "dev", "--", "--host", "0.0.0.0"]

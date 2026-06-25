@@ -1,0 +1,40 @@
+{
+  "name": "summary-buddy-frontend",
+  "version": "1.0.0",
+  "description": "React + TypeScript frontend for Summary Buddy Chatbot",
+  "main": "src/index.tsx",
+  "private": true,
+  "packageManager": "pnpm@10.12.4",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0",
+    "axios": "^1.6.2",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@types/node": "^20.10.4",
+    "vite": "^5.0.6",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vitest": "^1.0.4",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/jest-dom": "^6.1.5",
+    "nx": "23.0.1"
+  },
+  "scripts": {
+    "dev": "docker-compose -f docker-compose.dev.yml up --build"
+  },
+  "keywords": [
+    "summary-buddy",
+    "chatbot",
+    "game-master",
+    "rag",
+    "react",
+    "typescript"
+  ],
+  "author": "Development Team",
+  "license": "MIT",
+  "nx": {}
+}

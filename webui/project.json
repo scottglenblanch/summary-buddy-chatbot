@@ -1,0 +1,16 @@
+{
+  "name": "webui",
+  "sourceRoot": "webui/src",
+  "projectType": "application",
+  "targets": {
+    "install": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "webui",
+        "command": "pnpm install"
+      }
+    }
+  },
+  "tags": []
+}

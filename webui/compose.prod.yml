@@ -1,0 +1,30 @@
+# Frontend service - production (Nginx)
+# Included by devops/docker/docker-compose.yml
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: summary-buddy-frontend
+    ports:
+      - "80:80"
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      VITE_API_BASE_URL: http://backend:5000/api
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    networks:
+      - summary-buddy-network
+
+networks:
+  summary-buddy-network:
+    driver: bridge

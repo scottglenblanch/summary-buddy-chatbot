@@ -1,0 +1,8 @@
+# Development orchestration.
+# Each service's Docker config lives with its project; this file wires them together.
+#   Run from repo root:
+#     docker compose -f devops/docker/docker-compose.dev.yml up -d --build
+include:
+  - ./infra.dev.yml
+  - ../../api-server/compose.dev.yml
+  - ../../webui/compose.dev.yml
