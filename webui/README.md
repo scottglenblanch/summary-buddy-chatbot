@@ -4,7 +4,10 @@ React + TypeScript frontend for the Summary Buddy Chatbot with RAG capabilities.
 
 ## Features
 
-### 🎮 Game Master Chat Page (`/game-master-chatbot`)
+### 🎮 Game Master Page (`/game-master-chatbot`)
+A single page with two side-by-side sections:
+
+**Chat (left)**
 - Ask questions about your uploaded documents
 - RAG-powered responses with source citations
 - Conversation history with load/replay functionality
@@ -13,7 +16,7 @@ React + TypeScript frontend for the Summary Buddy Chatbot with RAG capabilities.
 - Conversation tracking with unique IDs
 - Clear individual questions or entire history
 
-### ⚙️ Admin Panel Page (`/admin`)
+**Admin Panel (right)**
 - **PDF Management**: Download an uploaded PDF
 - **RAG Pipeline Control**: Process PDFs and create vector database
 - **Pipeline Status Monitoring**: 
@@ -29,7 +32,7 @@ React + TypeScript frontend for the Summary Buddy Chatbot with RAG capabilities.
 - Smooth animations and transitions
 - Loading skeletons for better perceived performance
 - Comprehensive error handling with helpful messages
-- Navigation between pages with active indicators
+- Two-column layout that collapses to a single column on smaller screens
 - Professional typography and color scheme
 
 ## Project Structure
@@ -47,16 +50,14 @@ webui/
 │   │   └── AdminPanel.tsx      # Enhanced admin controls component
 │   │                            # Features: status monitoring, pipeline control
 │   ├── pages/
-│   │   ├── GameMasterPage.tsx # Chat page with header & footer
-│   │   └── AdminPage.tsx       # Admin page with header & footer
+│   │   └── GameMasterPage.tsx # Combined Chat + Admin page with header & footer
 │   ├── services/
 │   │   └── api.ts             # API client with all endpoints
 │   ├── types/
 │   │   └── index.ts           # TypeScript type definitions
 │   └── styles/
 │       ├── App.css            # Global styles & CSS variables
-│       ├── GameMasterPage.css # Page layout styles
-│       ├── AdminPage.css      # Admin page layout styles
+│       ├── GameMasterPage.css # Page layout & split-pane styles
 │       ├── GameMasterChat.css # Chat component (150+ lines)
 │       └── AdminPanel.css     # Admin component (200+ lines)
 ├── vite.config.ts              # Vite configuration
@@ -136,9 +137,8 @@ VITE_API_BASE_URL=http://localhost:5000/api
 
 | Route | Component | Purpose |
 |-------|-----------|---------|
-| `/` | GameMasterPage | Default route to chat |
-| `/game-master-chatbot` | GameMasterPage | Chat with the Game Master |
-| `/admin` | AdminPage | Admin controls and monitoring |
+| `/` | GameMasterPage | Default route to the Game Master page |
+| `/game-master-chatbot` | GameMasterPage | Chat with the Game Master and access admin controls |
 
 ## Components
 
@@ -212,9 +212,9 @@ downloadPDF() → void (triggers download)
   - Colors: primary, secondary, success, error, warning
   - Spacing, shadows, transitions
   
-- **Page layouts** in `GameMasterPage.css` and `AdminPage.css`:
-  - Header with navigation
-  - Responsive content area
+- **Page layout** in `GameMasterPage.css`:
+  - Header
+  - Responsive two-column (Chat | Admin) content area that collapses on small screens
   - Footer
 
 - **Component styles**:
@@ -364,14 +364,17 @@ pnpm lint
 
 ## Features
 
-### Game Master Chat Page (`/game-master-chatbot`)
+### Game Master Page (`/game-master-chatbot`)
+A single page split into two side-by-side sections.
+
+**Chat (left)**
 - Text area to ask questions
 - Read-only text area displaying Game Master responses
 - Sources attribution
 - Conversation history tracking
 - Error handling and loading states
 
-### Admin Panel (`/admin`)
+**Admin Panel (right)**
 - Download PDF button (uploaded document)
 - Run RAG Pipeline button
   - Converts PDF to text files

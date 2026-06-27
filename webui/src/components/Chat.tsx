@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { askGameMaster, ChatResponse } from '@services/api'
+import { askAiSummaryBuddy, ChatResponse } from '@services/api'
 import '../styles/GameMasterChat.css'
 
 interface ConversationMessage {
@@ -41,7 +41,7 @@ export default function GameMasterChat() {
     setSources([])
 
     try {
-      const response: ChatResponse = await askGameMaster(question)
+      const response: ChatResponse = await askAiSummaryBuddy(question)
       
       if (response.answer) {
         setAnswer(response.answer)

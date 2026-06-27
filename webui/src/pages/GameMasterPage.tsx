@@ -1,6 +1,6 @@
 import React from 'react'
 import GameMasterChat from '@/components/Chat'
-import { Link } from 'react-router-dom'
+import AdminPanel from '@components/AdminPanel'
 import '../styles/GameMasterPage.css'
 
 export default function GameMasterPage() {
@@ -8,20 +8,19 @@ export default function GameMasterPage() {
     <div className="page-container">
       <header className="page-header">
         <div className="header-content">
-          <h1>🌍 Summary Buddy - Game Master Chat</h1>
-          <nav className="nav-links">
-            <Link to="/game-master-chatbot" className="nav-link active">
-              Chat
-            </Link>
-            <Link to="/admin" className="nav-link">
-              Admin
-            </Link>
-          </nav>
+          <h1>🌍 Summary Buddy</h1>
         </div>
       </header>
 
       <main className="page-content">
-        <GameMasterChat />
+        <div className="page-split">
+          <section className="page-split-pane chat-pane">
+            <GameMasterChat />
+          </section>
+          <section className="page-split-pane admin-pane">
+            <AdminPanel />
+          </section>
+        </div>
       </main>
 
       <footer className="page-footer">

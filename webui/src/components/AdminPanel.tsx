@@ -88,11 +88,6 @@ export default function AdminPanel() {
 
   return (
     <div className="admin-panel">
-      <div className="admin-header">
-        <h1>⚙️ Admin Panel</h1>
-        <p className="subtitle">Manage resources and RAG pipeline</p>
-      </div>
-
       <div className="admin-controls">
         <section className="control-section">
           <h2>📤 Upload Documents</h2>

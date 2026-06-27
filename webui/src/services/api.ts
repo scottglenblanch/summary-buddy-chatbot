@@ -14,11 +14,11 @@ const api: AxiosInstance = axios.create({
 })
 
 /**
- * Ask the Game Master a question via RAG
+ * Ask the AI Summary Buddy a question via RAG
  * @param question - The question to ask
  * @returns Promise containing answer and sources
  */
-export async function askGameMaster(question: string): Promise<ChatResponse> {
+export async function askAiSummaryBuddy(question: string): Promise<ChatResponse> {
   try {
     const response = await api.post<ChatResponse>('/ask-ai-summary-buddy', {
       question,
@@ -28,7 +28,7 @@ export async function askGameMaster(question: string): Promise<ChatResponse> {
     throw new Error(
       error instanceof Error
         ? error.message
-        : 'Failed to ask Game Master'
+        : 'Failed to ask AI Summary Buddy'
     )
   }
 }
